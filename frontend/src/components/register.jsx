@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "../App.css";
 import { Link } from "react-router-dom";
+import axios from 'axios';
 const RegisterForm = () => {
   const [formData, setFormData] = useState({
     username: "",
@@ -18,7 +19,7 @@ const RegisterForm = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     let validationErrors = {};
     if (!formData.username) validationErrors.username = "Username is required!";
@@ -32,9 +33,31 @@ const RegisterForm = () => {
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
     } else {
-      console.log("Form submitted successfully!", formData);
-      setErrors({});
-      alert("Registration successfull");
+      try {
+        const { confirmPassword, ...dataToSend } = formData;
+
+        // Send the form data to the API without the confirmPassword field
+        const response = await axios.post(
+          "http://localhost:8000/api/v1/auth/register",
+          dataToSend
+        );
+        console.log("Registration successful:", response.data);
+        setErrors({}); // Clear errors if the registration is successful
+        alert("Registration successful!");
+
+        // Reset form data
+        setFormData({
+          username: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+        });
+      } catch (error) {
+        console.error("Registration failed:", error);
+        setErrors({
+          api: "An error occurred while registering. Please try again.",
+        });
+      }
     }
   };
 
