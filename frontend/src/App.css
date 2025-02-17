@@ -1,0 +1,65 @@
+.back-color {
+  background: radial-gradient(
+    circle at top right,
+    #09c58d,
+    #0970c5,
+    #2ed0e5,
+    #6dddbc
+  );
+}
+.input-label {
+  font-size: 1rem;
+}
+.input-text {
+  border: 0;
+  width: 100%;
+  border-bottom: 1px solid rgb(142, 212, 253);
+  padding: 0.4rem 0.5rem;
+}
+.input-text::placeholder {
+  font-size: 0.8rem;
+  color: rgb(161, 156, 156);
+}
+.input-text:focus {
+  outline: none;
+  box-shadow: 0;
+  border: 0;
+  border-bottom: 2px solid rgb(35, 162, 212);
+}
+.green-gradient {
+  font-weight: bold;
+  background: linear-gradient(
+    45deg,
+    #45cfa6,
+    #0970c5,
+    #2ed0e5,
+    #6dddbc
+  ); /* Gradient colors */
+  -webkit-background-clip: text; /* Clip the background to the text */
+  color: transparent;
+}
+.error {
+  font-size: 0.8rem;
+  color: rgb(240, 68, 68);
+}
+.submit-btn {
+  font-size: 0.9rem;
+  border: 0;
+  color: white;
+  width: 75%;
+  font-weight: 500;
+  padding: 0.4rem 0.8rem;
+  background: linear-gradient(to right bottom, #0970c5, #2ed0e5, #6dddbc);
+}
+.navigation{
+  text-align: center;
+  font-size: 0.8rem;
+  margin-top: 1rem;
+  p{
+    margin-bottom: 0;
+  }
+  .anchor{
+    color:rgb(0, 132, 255);
+    text-decoration: none;
+  }
+}
