@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../App.css";
+import axios from "axios";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -15,7 +17,7 @@ const Login = () => {
       [e.target.name]: e.target.value,
     });
   };
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     let validationErrors = {};
     if (!formData.email) validationErrors.email = "Email is required!";
@@ -25,7 +27,15 @@ const Login = () => {
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
     } else {
-      console.log("Form submitted successfully!", formData);
+      const response = await axios.post(
+        "http://localhost:8000/api/v1/auth/login",
+        formData
+      );
+      console.log("token:", response.data.data.accessToken);
+      localStorage.setItem("token", response.data.data.accessToken);
+
+      console.log("Form submitted successfully!", response);
+      navigate("/dashboard");
       setErrors({});
       alert("Login succesfully");
     }
@@ -45,7 +55,7 @@ const Login = () => {
               <h3 className="green-gradient">Login</h3>
             </div>
             <div className="w-100 py-3">
-              <form onSubmit={handleSubmit} >
+              <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                   <input
                     placeholder="email"

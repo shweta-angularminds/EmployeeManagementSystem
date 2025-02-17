@@ -5,6 +5,7 @@ import "./App.css";
 import Login from "./components/login";
 import RegisterForm from "./components/register";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import Dashboard from "./components/dashboard";
 function App() {
   return (
     <div>
@@ -13,6 +14,7 @@ function App() {
           <Route path="/" element={<RegisterForm />}></Route>
           <Route path="/register" element={<RegisterForm />} />
           <Route path="/login" element={<Login />}></Route>
+          <Route path="/dashboard" element={<Dashboard />}></Route>
         </Routes>
       </Router>
     </div>

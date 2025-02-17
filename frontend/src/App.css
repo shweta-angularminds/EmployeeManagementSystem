@@ -48,18 +48,18 @@
   color: white;
   width: 75%;
   font-weight: 500;
-  padding: 0.4rem 0.8rem;
+  padding: 0.4rem 1rem;
   background: linear-gradient(to right bottom, #0970c5, #2ed0e5, #6dddbc);
 }
-.navigation{
+.navigation {
   text-align: center;
   font-size: 0.8rem;
   margin-top: 1rem;
-  p{
+  p {
     margin-bottom: 0;
   }
-  .anchor{
-    color:rgb(0, 132, 255);
+  .anchor {
+    color: rgb(0, 132, 255);
     text-decoration: none;
   }
 }
