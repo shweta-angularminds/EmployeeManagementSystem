@@ -11,14 +11,14 @@ const getEmployees = asyncHandler(async (req, res) => {
   }
 
   // Destructure query parameters
-  const { page = 1, limit = 10, search, salary, sortBy, order } = req.query;
+  const { page = 1, limit = 5, search, salary, sortBy, order } = req.query;
 
   // Convert limit and page to integers
   const limitNumber = parseInt(limit, 10);
   const pageNumber = parseInt(page, 10);
 
-  // Default sorting field (can be changed)
-  const sortField = sortBy || "name"; // Default sort by name
+  // Default sorting field and order
+  const sortField = sortBy || "employee_name"; // Default sort by name if not provided
   const sortOrder = order === "desc" ? -1 : 1; // Default ascending order
 
   // Build query object
