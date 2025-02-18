@@ -4,6 +4,7 @@ import "../App.css";
 import axios from "axios";
 import EmployeeTable from "./EmployeeTable";
 import ReactPaginate from "react-paginate";
+import EmployeeForm from "./EmployeeForm";
 const Dashboard = () => {
   const [employees, setEmployees] = useState([]);
   const [sortField, setSortField] = useState("employee_name"); // Default to sorting by employee_name
@@ -12,7 +13,8 @@ const Dashboard = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-
+  const [showModal,setShowModal] = useState(false);
+  const[selectedEmployee,setSelectedEmployee] = useState(null);
   // Fetch data based on search, sort field, and sort order
   const getData = async (searchQuery = "", page = 1) => {
     const token = localStorage.getItem("token");
@@ -56,8 +58,17 @@ const Dashboard = () => {
   const handlePageChange = (selectedPage) => {
     setCurrentPage(selectedPage.selected + 1); // react-paginate uses a 0-based index
   };
-  const refreshData = () =>{
-    getData(search,currentPage);
+  const refreshData = () => {
+    getData(search, currentPage);
+  };
+  const handleAddEmployee=()=>{
+    setSelectedEmployee(null);
+    setShowModal(true);
+  }
+  const handleEditEmployee= (employee)=>{
+    setSelectedEmployee(employee);
+    setShowModal(true);
+
   }
 
   return (
@@ -72,21 +83,40 @@ const Dashboard = () => {
           placeholder="Search for an employee or department..."
         />
       </div>
-      <EmployeeTable employees={employees} onSort={handleSort} refreshData={refreshData}/>
-      {/* Pagination Controls */}
-      <div className="pagination mt-4 d-flex">
-        <ReactPaginate
-          previousLabel={"Previous"}
-          nextLabel={"Next"}
-          breakLabel={"..."} // This will display ellipses between page numbers
-          pageCount={totalPages} // Total number of pages
-          pageRangeDisplayed={2} // Display 4 pages in the middle (adjust this as needed)
-          marginPagesDisplayed={1} // Always display the first and last page
-          onPageChange={handlePageChange} // Function to handle page change
-          containerClassName={"pagination-container"} // Style the pagination container
-          activeClassName={"active-page"} // Add custom class for active page
-        />
-      </div>
+<button className="btn btn-primary" onClick={handleAddEmployee}>Add new Employee</button>
+      {/* Conditional rendering */}
+      {employees.length > 0 ? (
+        <>
+          <EmployeeTable
+            employees={employees}
+            onSort={handleSort}
+            refreshData={refreshData}
+            onEdit={handleEditEmployee}
+          />
+          {/* Pagination Controls */}
+          <div className="pagination mt-4 d-flex">
+            <ReactPaginate
+              previousLabel={"Previous"}
+              nextLabel={"Next"}
+              breakLabel={"..."} // This will display ellipses between page numbers
+              pageCount={totalPages} // Total number of pages
+              pageRangeDisplayed={2} // Display 4 pages in the middle (adjust this as needed)
+              marginPagesDisplayed={1} // Always display the first and last page
+              onPageChange={handlePageChange} // Function to handle page change
+              containerClassName={"pagination-container"} // Style the pagination container
+              activeClassName={"active-page"} // Add custom class for active page
+            />
+          </div>
+        </>
+      ) : (
+        <p>No employees found.</p> // Display message when no employees are available
+      )}
+      <EmployeeForm 
+        showModal ={showModal}
+        setShowModal={setShowModal}
+        employeeData = {selectedEmployee}
+        refreshData = {refreshData}
+      />
     </>
   );
 };

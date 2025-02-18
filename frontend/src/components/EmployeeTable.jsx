@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-const EmployeeTable = ({ employees, onSort,refreshData }) => {
+const EmployeeTable = ({ employees, onSort,refreshData ,onEdit}) => {
   const [sortOrder, setSortOrder] = useState(null);
   const [sortField, setSortField] = useState(null);
 
@@ -81,7 +81,7 @@ const EmployeeTable = ({ employees, onSort,refreshData }) => {
               <td>{employee.department}</td>
               <td>${employee.salary}</td>
               <td>
-                <button className="btn btn-primary">Update</button>
+                <button className="btn btn-primary" onClick={() =>onEdit(employee)}>Update</button>
                 <button
                   className="btn btn-danger"
                   onClick={() => deleteEmployee(employee._id)}
