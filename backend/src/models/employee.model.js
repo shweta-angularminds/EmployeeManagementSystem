@@ -20,6 +20,12 @@ const employeeSchema = new Schema(
     department: {
       type: String,
       required: true,
+      lowercase: true,
+    },
+    admin_Id: {
+      type: Schema.Types.ObjectId,
+      ref: "admins",
+      required: true,
     },
   },
   {

@@ -24,7 +24,9 @@ app.get("/", (req, res) => {
 
 // Auth routes
 import authRouter from "./routes/auth.router.js";
-app.use("/api/v1/auth", authRouter);
+import employeeRouter from "./routes/employee.router.js";
 
+app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/employee", employeeRouter);
 // Export the app
 export { app };
