@@ -75,18 +75,23 @@ const Dashboard = () => {
   return (
     <>
       <Header></Header>
-      <div>
-        <input
-          type="text"
-          name="search"
-          value={search}
-          onChange={handleSearchChange}
-          placeholder="Search for an employee or department..."
-        />
+      <div className="d-flex justify-content-between flex-wrap p-3 bg-custom">
+        <div className="col col-lg-9 col-md-9 col-8">
+          <input
+            type="text"
+            name="search"
+            value={search}
+            className="input-text"
+            onChange={handleSearchChange}
+            placeholder="Search for an employee or department..."
+          />
+        </div>
+        <div className="col col-lg-2 col-md-2 col-4 text-center">
+          <button className="normal-btn" onClick={handleAddEmployee}>
+            Add new Employee
+          </button>
+        </div>
       </div>
-      <button className="btn btn-primary" onClick={handleAddEmployee}>
-        Add new Employee
-      </button>
 
       {employees.length > 0 ? (
         <>

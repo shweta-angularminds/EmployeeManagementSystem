@@ -30,8 +30,8 @@ const EmployeeTable = ({ employees, onSort, refreshData, onEdit }) => {
   return (
     <>
       <table class="table border mt-4">
-        <thead>
-          <tr>
+        <thead className="bg-header">
+          <tr className="bg-header">
             <th scope="col">#</th>
             <th scope="col d-flex">
               <span className="d-flex align-items-center">
@@ -77,18 +77,18 @@ const EmployeeTable = ({ employees, onSort, refreshData, onEdit }) => {
               <td>{employee.designation}</td>
               <td>{employee.department}</td>
               <td>${employee.salary}</td>
-              <td>
+              <td className="text-start">
                 <button
-                  className="btn btn-primary"
+                  className="update-btn me-2"
                   onClick={() => onEdit(employee)}
                 >
-                  Update
+                  <i class="fa-solid fa-pen"></i>
                 </button>
                 <button
-                  className="btn btn-danger"
+                  className="delete-btn me-2"
                   onClick={() => handleDeleteClick(employee._id)}
                 >
-                  delete
+                  <i class="fa-solid fa-trash"></i>
                 </button>
               </td>
             </tr>

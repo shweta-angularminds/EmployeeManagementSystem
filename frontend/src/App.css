@@ -51,6 +51,35 @@
   padding: 0.4rem 1rem;
   background: linear-gradient(to right bottom, #0970c5, #2ed0e5, #6dddbc);
 }
+.normal-btn {
+  font-size: 0.9rem;
+  border: 0;
+  color: white;
+  font-weight: 500;
+  padding: 0.4rem 1rem;
+  background: linear-gradient(to right bottom, #0970c5, #007cc4, #6da7dd);
+}
+.update-btn {
+  font-size: 0.9rem;
+  border: 0;
+  color: rgb(4, 117, 170);
+  font-weight: 500;
+  padding: 0.4rem 1rem;
+  background-color: #e0eeff;
+  border-radius: 1rem;
+}
+.delete-btn {
+  font-size: 0.9rem;
+  border: 0;
+  color: rgb(180, 30, 37);
+  font-weight: 500;
+  padding: 0.4rem 1rem;
+  background-color: #ffeeef;
+  border-radius: 1rem;
+}
+th {
+  background-color: #e0eeff;
+}
 .navigation {
   text-align: center;
   font-size: 0.8rem;
@@ -63,7 +92,16 @@
     text-decoration: none;
   }
 }
-
+.bg-custom {
+  background: linear-gradient(
+    to right bottom,
+    rgb(238, 238, 248),
+    rgb(245, 248, 255)
+  );
+}
+td {
+  text-transform: capitalize;
+}
 /* Style for the pagination container */
 .pagination-container {
   display: flex;
