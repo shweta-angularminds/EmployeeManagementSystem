@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
-import axiosInstance from "../api/axiosInstance";
+import { addEmployee, updateEmployee } from "../service/employeeService";
+import { showToast } from "../service/notify";
+
 const EmployeeForm = ({
   showModal,
   setShowModal,
@@ -35,7 +37,7 @@ const EmployeeForm = ({
   const validateForm = () => {
     let formErrors = { ...errors };
     let isValid = true;
-    // Validate Employee Name
+
     if (employeeName.trim().length < 3) {
       formErrors.employeeName = "Employee Name must be at least 3 characters.";
       isValid = false;
@@ -43,21 +45,20 @@ const EmployeeForm = ({
       formErrors.employeeName = "";
     }
 
-    // Validate Designation
     if (!designation.trim()) {
       formErrors.designation = "Designation is required.";
       isValid = false;
     } else {
       formErrors.designation = "";
     }
-    // Validate Department
+
     if (!department.trim()) {
       formErrors.department = "Department is required.";
       isValid = false;
     } else {
       formErrors.department = "";
     }
-    // Validate Salary
+
     if (!salary || isNaN(salary) || salary <= 0) {
       formErrors.salary = "Salary must be a positive number.";
       isValid = false;
@@ -74,7 +75,7 @@ const EmployeeForm = ({
     if (!validateForm()) {
       return;
     }
-    // const token = localStorage.getItem("token");
+
     const formData = {
       employee_name: employeeName,
       designation,
@@ -83,23 +84,16 @@ const EmployeeForm = ({
     };
     try {
       if (employeeData) {
-        await axiosInstance.put(
-          `/employee/update/${employeeData._id}`,
-          formData
-        );
-        alert("Employee updated successfully!");
-
-        refreshData();
-        setShowModal(false);
+        await updateEmployee(employeeData._id, formData);
+        showToast("Updated successfully!", "success");
       } else {
-        await axiosInstance.post("/employee/add", formData);
-        alert("employee added succesfully!");
-        refreshData();
-        setShowModal(false);
+        await addEmployee(formData);
+        showToast("Added successfully!", "success");
       }
+      refreshData();
+      setShowModal(false);
     } catch (error) {
-      console.error("Error submitting form:", error);
-      alert("There was an error. Please try again.");
+      showToast("There was an error. Please try again.", "error");
     }
   };
 

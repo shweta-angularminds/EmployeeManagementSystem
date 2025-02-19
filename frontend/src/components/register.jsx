@@ -4,9 +4,7 @@ import { Link } from "react-router-dom";
 import { registerUser } from "../service/authService.js";
 import { showToast } from "../service/notify";
 
-
 const RegisterForm = () => {
-
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -41,7 +39,9 @@ const RegisterForm = () => {
     } else {
       try {
         const { confirmPassword, ...dataToSend } = formData;
+
         await registerUser(dataToSend);
+        
         setErrors({});
         showToast("Registered Succesfully!", "success");
         setFormData({
@@ -52,7 +52,7 @@ const RegisterForm = () => {
         });
       } catch (error) {
         showToast("Unable to register, Please try again!", "error");
-        console.error("Registration failed:", error);
+        // console.error("Registration failed:", error);
         setErrors({
           api: "An error occurred while registering. Please try again.",
         });

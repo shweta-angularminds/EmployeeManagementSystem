@@ -1,31 +1,24 @@
 import React from "react";
 import "../App.css";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { showToast } from "../service/notify";
+import { logOutUser } from "../service/authService";
+
 const Header = () => {
   const navigate = useNavigate();
   const logOut = async () => {
+
     try {
-      const token = localStorage.getItem("token");
-      console.log(token);
-      const response = await axios.post(
-        "http://localhost:8000/api/v1/auth/logout",
-        "",
-        {
-          headers: {
-            Authorization: token ? `Bearer ${token}` : "",
-          },
-        }
-      );
-      console.log("Logout :", response);
-      localStorage.clear("token");
+
+      await logOutUser();
+
       showToast("Log out succesfully!", "success");
       navigate("/login");
+
     } catch (error) {
       showToast("Something went wrong", "error");
-      console.error("logout failed:", error);
     }
+
   };
 
   return (

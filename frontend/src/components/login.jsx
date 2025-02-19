@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../App.css";
-import axios from "axios";
-import axiosInstance from "../api/axiosInstance";
 import { showToast } from "../service/notify";
+import { loginUser } from "../service/authService";
 
 const Login = () => {
+  
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -24,27 +24,24 @@ const Login = () => {
     e.preventDefault();
     let validationErrors = {};
     if (!formData.email) validationErrors.email = "Email is required!";
-    if (!formData.email.includes("@")) validationErrors.email = "Invalid email";
-    if (!formData.email.includes(".")) validationErrors.email = "Invalid email";
+    if (!/\S+@\S+\.\S+/.test(formData.email))
+      validationErrors.email = "Please enter a valid email.";
     if (!formData.password) validationErrors.password = "Password is required!";
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
     } else {
-      const response = await axiosInstance.post("/auth/login", formData, {
-        withCredentials: true,
-      });
-      console.log("token:", response.data.data.accessToken);
-      localStorage.setItem("token", response.data.data.accessToken);
+      try {
+        await loginUser(formData);
+        showToast("Login successful!", "success");
 
-      console.log("Form submitted successfully!", response);
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 1000);
 
-      showToast("Login successful!", "success");
-      setTimeout(() => {
-        navigate("/dashboard");
-      }, 1000);
-      
-
-      setErrors({});
+        setErrors({});
+      } catch (error) {
+        showToast("Login Failed!", "error");
+      }
     }
   };
   return (

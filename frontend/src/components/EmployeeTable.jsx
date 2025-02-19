@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import { confirmDelete } from "../service/notify";
-import axiosInstance from "../api/axiosInstance";
+import { confirmDelete, showToast } from "../service/notify";
+import { deleteEmployee } from "../service/employeeService";
+import { firstValueFrom } from "rxjs";
+
 const EmployeeTable = ({ employees, onSort, refreshData, onEdit }) => {
   const [sortOrder, setSortOrder] = useState(null);
   const [sortField, setSortField] = useState(null);
@@ -10,36 +12,18 @@ const EmployeeTable = ({ employees, onSort, refreshData, onEdit }) => {
     setSortOrder(order);
     onSort(field, order);
   };
-  const handleDeleteClick = (employeeId) => {
-    // Show the confirmation dialog when the user clicks delete
-    confirmDelete().subscribe((confirmed) => {
-      if (confirmed) {
-        // Call deleteEmployee if the user confirmed the deletion
-        deleteEmployee(employeeId)
-          .then(() => {
-            console.log("Employee deleted successfully!");
-            // Optionally, update your state to remove the employee from the UI
-            // For example, you can filter out the deleted employee
-          })
-          .catch((error) => {
-            console.error("Error deleting employee:", error);
-            // You could also show an error toast here
-          });
-      } else {
-        console.log("Employee deletion cancelled");
-      }
-    });
-  };
 
-  const deleteEmployee = async (id) => {
+  const handleDeleteClick = async (employeeId) => {
     try {
-      const response = await axiosInstance.delete(`/employee/delete/${id}`);
-      console.log("response:", response);
-      alert("employee deleted succesfully !");
-      refreshData();
+      const confirmed = await firstValueFrom(confirmDelete());
+
+      if (confirmed) {
+        await deleteEmployee(employeeId);
+        showToast("Deleted successfully!", "successs");
+        refreshData();
+      }
     } catch (error) {
-      console.error("Error deleting employee:", error);
-      alert("An error occurred while deleting the employee.");
+      showToast("Something went wrong!", "error");
     }
   };
 
@@ -88,7 +72,7 @@ const EmployeeTable = ({ employees, onSort, refreshData, onEdit }) => {
         <tbody>
           {employees.map((employee, index) => (
             <tr key={employee._id}>
-              <td>{index + 1}</td> {/* This will display the row number */}
+              <td>{index + 1}</td>
               <td>{employee.employee_name}</td>
               <td>{employee.designation}</td>
               <td>{employee.department}</td>

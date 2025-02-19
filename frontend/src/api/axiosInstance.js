@@ -7,7 +7,7 @@ axiosInstance.interceptors.request.use(
   (config) => {
     const accessToken = localStorage.getItem("token");
     if (accessToken) {
-      config.headers["Authorization"] = `Bearer ${accessToken}`; // Add it to the headers
+      config.headers["Authorization"] = `Bearer ${accessToken}`; 
     }
     return config;
   },
@@ -41,7 +41,7 @@ const refreshAccessToken = async () => {
       "http://localhost:8000/api/v1/auth/refresh-token",
       {},
       {
-        withCredentials: true, 
+        withCredentials: true,
       }
     );
     console.log(response.data);

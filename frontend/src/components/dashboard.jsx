@@ -1,80 +1,64 @@
 import React, { useEffect, useState } from "react";
 import Header from "./Header";
-import axiosInstance from "../api/axiosInstance";
 import "../App.css";
+import { getEmployees } from "../service/employeeService";
 import { useNavigate } from "react-router-dom";
 import EmployeeTable from "./EmployeeTable";
 import ReactPaginate from "react-paginate";
 import EmployeeForm from "./EmployeeForm";
+
 const Dashboard = () => {
   const navigate = useNavigate();
   const [employees, setEmployees] = useState([]);
-  const [sortField, setSortField] = useState("employee_name"); // Default to sorting by employee_name
-  const [sortOrder, setSortOrder] = useState("asc"); // Default to ascending order
+  const [sortField, setSortField] = useState("employee_name");
+  const [sortOrder, setSortOrder] = useState("asc");
   const [search, setSearch] = useState("");
-
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [showModal, setShowModal] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
+
   const handleLogout = () => {
     // You can now navigate to the login page in the component
     navigate("/login");
   };
-  // Fetch data based on search, sort field, and sort order
+
   const getData = async (searchQuery = "", page = 1) => {
-    // const token = localStorage.getItem("token");
-    console.log("page number provided in get data:", page);
-
-    // Prepare the query parameters conditionally
-    
-
-    // const response = await axios.get("http://localhost:8000/api/v1/employee", {
-    //   headers: {
-    //     Authorization: token ? `Bearer ${token}` : "",
-    //   },
-    //   params,
-    // });
-
     try {
       const params = {};
-      if (searchQuery.trim()) params.search = searchQuery; // Only add search if it exists
-      if (sortField) params.sortBy = sortField; // Only add sortBy if it's defined
-      if (sortOrder) params.order = sortOrder; // Only add order if it's defined
+      if (searchQuery.trim()) params.search = searchQuery;
+      if (sortField) params.sortBy = sortField;
+      if (sortOrder) params.order = sortOrder;
       params.page = page;
-      const response = await axiosInstance.get("/employee", {
-        params,
-      });
-      console.log("api response:", response);
-      console.table(response.data.employees);
-      setEmployees(response.data.employees);
-      setTotalPages(response.data.totalPages);
-      setCurrentPage(response.data.page);
+
+      const response = await getEmployees(params);
+
+      setEmployees(response.employees);
+      setTotalPages(response.totalPages);
+      setCurrentPage(response.page);
     } catch (error) {
-      // Check if error status is 401 and perform custom logic
       if (error.response && error.response.status === 401) {
         handleLogout(); // Call your custom logout handler
       }
     }
-    // Ensure the correct page number is set after API call
   };
 
   useEffect(() => {
-    getData(search, currentPage); // Fetch data when currentPage or search changes
-  }, [sortField, sortOrder, search, currentPage]); // This will trigger when any of these change
+    getData(search, currentPage);
+  }, [sortField, sortOrder, search, currentPage]);
 
   const handleSearchChange = (e) => {
     const value = e.target.value;
-    setSearch(value); // This will trigger useEffect to re-fetch the data
+    setSearch(value);
   };
 
   const handleSort = (field, order) => {
-    setSortField(field); // Set the sort field
-    setSortOrder(order); // Set the sort order
+    setSortField(field);
+    setSortOrder(order);
   };
 
   const handlePageChange = (selectedPage) => {
-    setCurrentPage(selectedPage.selected + 1); // react-paginate uses a 0-based index
+    setCurrentPage(selectedPage.selected + 1);
   };
   const refreshData = () => {
     getData(search, currentPage);
@@ -103,7 +87,7 @@ const Dashboard = () => {
       <button className="btn btn-primary" onClick={handleAddEmployee}>
         Add new Employee
       </button>
-      {/* Conditional rendering */}
+
       {employees.length > 0 ? (
         <>
           <EmployeeTable
@@ -112,7 +96,7 @@ const Dashboard = () => {
             refreshData={refreshData}
             onEdit={handleEditEmployee}
           />
-          {/* Pagination Controls */}
+
           <div className="pagination mt-4 d-flex">
             <ReactPaginate
               previousLabel={"Previous"}
@@ -128,7 +112,7 @@ const Dashboard = () => {
           </div>
         </>
       ) : (
-        <p>No employees found.</p> // Display message when no employees are available
+        <p>No employees found.</p>
       )}
       <EmployeeForm
         showModal={showModal}
