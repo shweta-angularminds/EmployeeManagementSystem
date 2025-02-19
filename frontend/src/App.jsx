@@ -1,20 +1,42 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./App.css";
 import Login from "./components/login";
 import RegisterForm from "./components/register";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link,
+  Navigate,
+} from "react-router-dom";
 import Dashboard from "./components/dashboard";
+import PrivateRoute from "./api/PrivateRoute";
 function App() {
+  const isAuthenticated = () => {
+    const token = localStorage.getItem("token");
+    return token ? true : false;
+  }; 
+
   return (
     <div>
       <Router>
         <Routes>
-          <Route path="/" element={<RegisterForm />}></Route>
+          {/* <Route path="/" element={<RegisterForm />}></Route> */}
+          <Route
+            path="/"
+            element={isAuthenticated ? <Navigate to="/dashboard" /> : <Login />}
+          />
           <Route path="/register" element={<RegisterForm />} />
           <Route path="/login" element={<Login />}></Route>
-          <Route path="/dashboard" element={<Dashboard />}></Route>
+          {/* Protected routes */}
+          <Route
+            path="/dashboard"
+            element={
+              <PrivateRoute isAuthenticated={isAuthenticated}>
+                <Dashboard />
+              </PrivateRoute>
+            }
+          />
+          {/* <Route path="/dashboard" element={<Dashboard />}></Route> */}
         </Routes>
       </Router>
     </div>

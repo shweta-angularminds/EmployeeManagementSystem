@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import "../App.css";
 import { Link } from "react-router-dom";
-import axios from 'axios';
+import { registerUser } from "../service/authService.js";
+import { showToast } from "../service/notify";
+
+
 const RegisterForm = () => {
+
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -22,30 +26,24 @@ const RegisterForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     let validationErrors = {};
+
     if (!formData.username) validationErrors.username = "Username is required!";
     if (!formData.email) validationErrors.email = "email is required!";
-    if (!formData.email.includes("@")) validationErrors.email = "Invalid email";
-    if (!formData.email.includes(".")) validationErrors.email = "Invalid email";
+    if (!/\S+@\S+\.\S+/.test(formData.email))
+      validationErrors.email = "Please enter a valid email.";
     if (formData.password.length < 6)
       validationErrors.password = "Password must be at least 6 characters";
     if (formData.password !== formData.confirmPassword)
       validationErrors.confirmPassword = "Password not match!";
+
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
     } else {
       try {
         const { confirmPassword, ...dataToSend } = formData;
-
-        // Send the form data to the API without the confirmPassword field
-        const response = await axios.post(
-          "http://localhost:8000/api/v1/auth/register",
-          dataToSend
-        );
-        console.log("Registration successful:", response.data);
-        setErrors({}); // Clear errors if the registration is successful
-        alert("Registration successful!");
-
-        // Reset form data
+        await registerUser(dataToSend);
+        setErrors({});
+        showToast("Registered Succesfully!", "success");
         setFormData({
           username: "",
           email: "",
@@ -53,6 +51,7 @@ const RegisterForm = () => {
           confirmPassword: "",
         });
       } catch (error) {
+        showToast("Unable to register, Please try again!", "error");
         console.error("Registration failed:", error);
         setErrors({
           api: "An error occurred while registering. Please try again.",
@@ -78,13 +77,6 @@ const RegisterForm = () => {
             <div className="w-100 ">
               <form onSubmit={handleSubmit}>
                 <div className="mb-3">
-                  {/* <label
-                    className="input-label"
-                    htmlFor="
-                        username"
-                  >
-                    Username
-                  </label> */}
                   <input
                     placeholder="username"
                     className="input-text"
@@ -98,13 +90,6 @@ const RegisterForm = () => {
                   )}
                 </div>
                 <div className="mb-3">
-                  {/* <label
-                    className="input-label"
-                    htmlFor="
-                        email"
-                  >
-                    Email
-                  </label> */}
                   <input
                     placeholder="email"
                     className="input-text"
@@ -116,13 +101,6 @@ const RegisterForm = () => {
                   {errors.email && <p className="error">{errors.email}</p>}
                 </div>
                 <div className="mb-3">
-                  {/* <label
-                    className="input-label"
-                    htmlFor="
-                        password"
-                  >
-                    Password
-                  </label> */}
                   <input
                     placeholder="password"
                     className="input-text"
@@ -136,13 +114,6 @@ const RegisterForm = () => {
                   )}
                 </div>
                 <div className="mb-3">
-                  {/* <label
-                    className="input-label"
-                    htmlFor="
-                        confirmPassword"
-                  >
-                    Confirm Password{" "}
-                  </label> */}
                   <input
                     className="input-text"
                     type="password"

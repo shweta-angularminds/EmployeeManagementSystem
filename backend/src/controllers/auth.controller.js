@@ -75,7 +75,9 @@ const loginUser = asyncHandler(async (req, res) => {
   );
   const options = {
     httpOnly: true,
-    secure: true,
+    secure: false,
+    sameSite: "None",
+    path: "/",
   };
   return res
     .status(200)
@@ -107,7 +109,9 @@ const logOutUser = asyncHandler(async (req, res) => {
   );
   const options = {
     httpOnly: true,
-    secure: true,
+    secure: false,
+    sameSite: "None",
+    path: "/",
   };
   return res
     .status(200)
@@ -117,11 +121,11 @@ const logOutUser = asyncHandler(async (req, res) => {
 });
 
 const refreshAccessToken = asyncHandler(async (req, res) => {
-  const incomingRefreshToken =
-    req.cookies.refreshToken || req.body.refreshToken;
+  const incomingRefreshToken = req.cookies.refreshToken;
+  console.log("\nRequest:\n", req.cookies);
 
   if (!incomingRefreshToken) {
-    throw new ApiError(401, "Unauthorized request");
+    throw new ApiError(404, "token is required");
   }
 
   try {
@@ -164,7 +168,9 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     // Set new refresh token and access token in the cookies
     const options = {
       httpOnly: true,
-      secure: true,
+      secure: false,
+      sameSite: "None",
+      path: "/",
     };
 
     return res
@@ -180,9 +186,8 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
 const self = asyncHandler(async (req, res) => {
   const data = {
     username: req.user.username,
-   
+
     email: req.user.email,
-  
   };
 
   return res

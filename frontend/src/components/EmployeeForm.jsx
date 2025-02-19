@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axiosInstance from "../api/axiosInstance";
 const EmployeeForm = ({
   showModal,
   setShowModal,
@@ -30,7 +30,7 @@ const EmployeeForm = ({
       setDepartment(employeeData.department);
       setSalary(employeeData.salary);
     }
-  }, [showModal,employeeData]);
+  }, [showModal, employeeData]);
 
   const validateForm = () => {
     let formErrors = { ...errors };
@@ -74,7 +74,7 @@ const EmployeeForm = ({
     if (!validateForm()) {
       return;
     }
-    const token = localStorage.getItem("token");
+    // const token = localStorage.getItem("token");
     const formData = {
       employee_name: employeeName,
       designation,
@@ -83,29 +83,16 @@ const EmployeeForm = ({
     };
     try {
       if (employeeData) {
-        await axios.put(
-          `http://localhost:8000/api/v1/employee/update/${employeeData._id}`,
-          formData,
-          {
-            headers: {
-              Authorization: token ? `Bearer ${token}` : "",
-            },
-          }
+        await axiosInstance.put(
+          `/employee/update/${employeeData._id}`,
+          formData
         );
         alert("Employee updated successfully!");
-        
+
         refreshData();
         setShowModal(false);
       } else {
-        await axios.post(
-          "http://localhost:8000/api/v1/employee/add",
-          formData,
-          {
-            headers: {
-              Authorization: token ? `Bearer ${token}` : "",
-            },
-          }
-        );
+        await axiosInstance.post("/employee/add", formData);
         alert("employee added succesfully!");
         refreshData();
         setShowModal(false);

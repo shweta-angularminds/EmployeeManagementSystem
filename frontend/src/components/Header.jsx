@@ -2,11 +2,11 @@ import React from "react";
 import "../App.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { showToast } from "../service/notify";
 const Header = () => {
   const navigate = useNavigate();
   const logOut = async () => {
     try {
-      alert("hello");
       const token = localStorage.getItem("token");
       console.log(token);
       const response = await axios.post(
@@ -20,9 +20,10 @@ const Header = () => {
       );
       console.log("Logout :", response);
       localStorage.clear("token");
-      alert("logout succesfully!");
+      showToast("Log out succesfully!", "success");
       navigate("/login");
     } catch (error) {
+      showToast("Something went wrong", "error");
       console.error("logout failed:", error);
     }
   };

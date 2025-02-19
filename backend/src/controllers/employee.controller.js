@@ -22,7 +22,7 @@ const getEmployees = asyncHandler(async (req, res) => {
   const sortOrder = order === "desc" ? -1 : 1; // Default ascending order
 
   // Build query object
-  let query = {};
+  let query = { admin_Id: admin_Id }; // Ensure we only get employees for this admin
 
   // Search by employee name or department
   if (search) {

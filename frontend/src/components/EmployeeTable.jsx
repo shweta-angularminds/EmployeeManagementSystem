@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import axios from "axios";
-const EmployeeTable = ({ employees, onSort,refreshData ,onEdit}) => {
+import { confirmDelete } from "../service/notify";
+import axiosInstance from "../api/axiosInstance";
+const EmployeeTable = ({ employees, onSort, refreshData, onEdit }) => {
   const [sortOrder, setSortOrder] = useState(null);
   const [sortField, setSortField] = useState(null);
 
@@ -9,18 +10,30 @@ const EmployeeTable = ({ employees, onSort,refreshData ,onEdit}) => {
     setSortOrder(order);
     onSort(field, order);
   };
+  const handleDeleteClick = (employeeId) => {
+    // Show the confirmation dialog when the user clicks delete
+    confirmDelete().subscribe((confirmed) => {
+      if (confirmed) {
+        // Call deleteEmployee if the user confirmed the deletion
+        deleteEmployee(employeeId)
+          .then(() => {
+            console.log("Employee deleted successfully!");
+            // Optionally, update your state to remove the employee from the UI
+            // For example, you can filter out the deleted employee
+          })
+          .catch((error) => {
+            console.error("Error deleting employee:", error);
+            // You could also show an error toast here
+          });
+      } else {
+        console.log("Employee deletion cancelled");
+      }
+    });
+  };
 
   const deleteEmployee = async (id) => {
-    const token = localStorage.getItem("token");
     try {
-      const response = await axios.delete(
-        "http://localhost:8000/api/v1/employee/delete/" + id,
-        {
-          headers: {
-            Authorization: token ? `Bearer ${token}` : "",
-          },
-        }
-      );
+      const response = await axiosInstance.delete(`/employee/delete/${id}`);
       console.log("response:", response);
       alert("employee deleted succesfully !");
       refreshData();
@@ -81,10 +94,15 @@ const EmployeeTable = ({ employees, onSort,refreshData ,onEdit}) => {
               <td>{employee.department}</td>
               <td>${employee.salary}</td>
               <td>
-                <button className="btn btn-primary" onClick={() =>onEdit(employee)}>Update</button>
+                <button
+                  className="btn btn-primary"
+                  onClick={() => onEdit(employee)}
+                >
+                  Update
+                </button>
                 <button
                   className="btn btn-danger"
-                  onClick={() => deleteEmployee(employee._id)}
+                  onClick={() => handleDeleteClick(employee._id)}
                 >
                   delete
                 </button>

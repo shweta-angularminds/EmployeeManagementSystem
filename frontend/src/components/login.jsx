@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../App.css";
 import axios from "axios";
+import axiosInstance from "../api/axiosInstance";
+import { showToast } from "../service/notify";
 
 const Login = () => {
   const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -27,17 +30,21 @@ const Login = () => {
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
     } else {
-      const response = await axios.post(
-        "http://localhost:8000/api/v1/auth/login",
-        formData
-      );
+      const response = await axiosInstance.post("/auth/login", formData, {
+        withCredentials: true,
+      });
       console.log("token:", response.data.data.accessToken);
       localStorage.setItem("token", response.data.data.accessToken);
 
       console.log("Form submitted successfully!", response);
-      navigate("/dashboard");
+
+      showToast("Login successful!", "success");
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 1000);
+      
+
       setErrors({});
-      alert("Login succesfully");
     }
   };
   return (

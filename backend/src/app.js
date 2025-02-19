@@ -7,10 +7,11 @@ const app = express();
 // CORS middleware configuration
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN,
-    credentials: true,
+    origin: "http://localhost:3000", // Your frontend URL (can also use process.env.CORS_ORIGIN)
+    credentials: true, // Allow cookies to be sent and received
   })
 );
+
 
 // Middleware for handling JSON and URL-encoded data
 app.use(express.json());
