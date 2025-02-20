@@ -20,43 +20,58 @@ const RegisterForm = () => {
       [e.target.name]: e.target.value,
     });
   };
+  const validateForm = (formData) => {
+    const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d).{6,}$/;
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
     let validationErrors = {};
 
     if (!formData.username) validationErrors.username = "Username is required!";
-    if (!formData.email) validationErrors.email = "email is required!";
-    if (!/\S+@\S+\.\S+/.test(formData.email))
+    if (!formData.email) validationErrors.email = "Email is required!";
+    else if (!/\S+@\S+\.\S+/.test(formData.email))
       validationErrors.email = "Please enter a valid email.";
-    if (formData.password.length < 6)
-      validationErrors.password = "Password must be at least 6 characters";
+
+ 
+    if (!passwordRegex.test(formData.password)) {
+      validationErrors.password =
+        "Password must be at least 6 characters long and contain at least one alphabet and one digit.";
+    }
+
     if (formData.password !== formData.confirmPassword)
-      validationErrors.confirmPassword = "Password not match!";
+      validationErrors.confirmPassword = "Password does not match!";
+
+    return validationErrors;
+  };
+
+  const handleSubmit = async (e) => {
+    
+    e.preventDefault();
+    let validationErrors = {};
+    validationErrors = await validateForm(formData);
 
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
-    } else {
-      try {
-        const { confirmPassword, ...dataToSend } = formData;
+      return;
+    }
 
-        await registerUser(dataToSend);
+    try {
+      const { confirmPassword, ...dataToSend } = formData;
+      console.log("data:", dataToSend);
+      await registerUser(dataToSend);
 
-        setErrors({});
-        showToast("Registered Succesfully!", "success");
-        setFormData({
-          username: "",
-          email: "",
-          password: "",
-          confirmPassword: "",
-        });
-      } catch (error) {
-        showToast("Unable to register, Please try again!", "error");
-        // console.error("Registration failed:", error);
-        setErrors({
-          api: "An error occurred while registering. Please try again.",
-        });
-      }
+      setErrors({});
+      showToast("Registered Succesfully!", "success");
+      setFormData({
+        username: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+      });
+    } catch (error) {
+      showToast("Unable to register, Please try again!", "error");
+      console.log("Registration failed:", error);
+      setErrors({
+        api: "An error occurred while registering. Please try again.",
+      });
     }
   };
 
@@ -68,8 +83,8 @@ const RegisterForm = () => {
       >
         <div className="row d-flex justify-content-center align-items-center">
           <div
-            className="col col-lg-4 bg-white mt-5 p-4 
-           border min-height-65"
+            className="col col-lg-4 col-md-8 col-10 bg-white mt-5 p-4 
+           border "
           >
             <div className="header text-center">
               <h3 className="green-gradient">Register</h3>

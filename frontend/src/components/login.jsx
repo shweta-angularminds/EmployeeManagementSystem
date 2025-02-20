@@ -51,8 +51,8 @@ const Login = () => {
       >
         <div className="row d-flex justify-content-center align-items-center">
           <div
-            className="col col-lg-4 bg-white mt-5 p-4 
-           border min-height-65"
+            className="col col-lg-4 col-md-8 col-10 bg-white mt-5 p-4 
+           border "
           >
             <div className="header text-center">
               <h3 className="green-gradient">Login</h3>

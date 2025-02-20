@@ -1,4 +1,4 @@
-import React, { useEffect, useState,useRef } from "react";
+import React, { useEffect, useState } from "react";
 import "../App.css";
 import { useNavigate } from "react-router-dom";
 import { showToast } from "../service/notify";
@@ -7,7 +7,7 @@ import { logOutUser, getProfile } from "../service/authService";
 const Header = () => {
   const navigate = useNavigate();
   const [profile, setProfile] = useState({ username: "", email: "" });
-  const logoutInProgress = useRef(false); // Use ref to track logout progress
+  const [isLoggingOut, setIsLoggingOut] = useState(false); 
 
   const fetchProfileData = async () => {
     try {
@@ -18,24 +18,24 @@ const Header = () => {
       logOut();
     }
   };
-  useEffect(() => {
-    if (!logoutInProgress.current) {
-      fetchProfileData();
-      console.log("Use effect called")
-    }
-  }, []);
 
+  useEffect(() => {
+    if (!isLoggingOut) {
+      fetchProfileData();
+      console.log("Use effect called");
+    }
+  }, []); 
   const logOut = async () => {
     try {
-      logoutInProgress.current = true;
+      setIsLoggingOut(true);
       await logOutUser();
 
-      showToast("Log out succesfully!", "success");
+      showToast("Logged out successfully!", "success");
       navigate("/login");
     } catch (error) {
       showToast("Something went wrong", "error");
     } finally {
-      logoutInProgress.current = false; 
+      setIsLoggingOut(false); 
     }
   };
 
@@ -47,7 +47,7 @@ const Header = () => {
           <span className="p-2 me-3">
             <div className="dropdown-center">
               <button
-                className="btn  dropdown-toggle fw-bold"
+                className="btn dropdown-toggle fw-bold"
                 type="button"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
@@ -66,4 +66,5 @@ const Header = () => {
     </>
   );
 };
+
 export default Header;
