@@ -22,7 +22,7 @@ const loginUser = async (data) => {
 
 const logOutUser = async () => {
   try {
-    const response = await axiosInstance.post(
+    await axiosInstance.post(
       "/auth/logout",
       {},
       {
@@ -35,4 +35,13 @@ const logOutUser = async () => {
     throw error;
   }
 };
-export { registerUser, loginUser, logOutUser };
+
+const getProfile = async () => {
+  try {
+    const response = await axiosInstance.get("/auth/profile");
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+export { registerUser, loginUser, logOutUser, getProfile };

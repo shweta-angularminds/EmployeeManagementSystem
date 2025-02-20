@@ -13,9 +13,9 @@ const getCookieOptions = (type) => {
   };
 
   if (type === "accessToken") {
-    options.expires = new Date(Date.now() + 1 * 60 * 1000); // 3 minutes
+    options.expires = new Date(Date.now() + 30 * 60 * 1000); // 3 minutes
   } else if (type === "refreshToken") {
-    options.expires = new Date(Date.now() + 3 * 60 * 1000); // 10 days
+    options.expires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 10 days
   }
 
   return options;

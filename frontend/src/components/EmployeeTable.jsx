@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { confirmDelete, showToast } from "../service/notify";
 import { deleteEmployee } from "../service/employeeService";
 import { firstValueFrom } from "rxjs";
-
+import "../App.css";
 const EmployeeTable = ({ employees, onSort, refreshData, onEdit }) => {
   const [sortOrder, setSortOrder] = useState(null);
   const [sortField, setSortField] = useState(null);
@@ -29,12 +29,12 @@ const EmployeeTable = ({ employees, onSort, refreshData, onEdit }) => {
 
   return (
     <>
-      <table class="table border mt-4">
-        <thead className="bg-header">
-          <tr className="bg-header">
-            <th scope="col">#</th>
-            <th scope="col d-flex">
-              <span className="d-flex align-items-center">
+      <table className="table table-hover border mb-0">
+        <thead className="">
+          <tr className="">
+            <th scope="col ">#</th>
+            <th scope="col  " className="d-flex ">
+              <span className="d-flex align-items-center ">
                 <span className="me-2">Employee Name</span>
                 <span className="d-flex flex-column align-items-center justify-content-start">
                   <i
@@ -76,10 +76,13 @@ const EmployeeTable = ({ employees, onSort, refreshData, onEdit }) => {
               <td>{employee.employee_name}</td>
               <td>{employee.designation}</td>
               <td>{employee.department}</td>
-              <td>${employee.salary}</td>
+              <td>
+                &#8377;
+                {employee.salary}
+              </td>
               <td className="text-start">
                 <button
-                  className="update-btn me-2"
+                  className="update-btn me-2 mb-1"
                   onClick={() => onEdit(employee)}
                 >
                   <i class="fa-solid fa-pen"></i>
@@ -88,7 +91,7 @@ const EmployeeTable = ({ employees, onSort, refreshData, onEdit }) => {
                   className="delete-btn me-2"
                   onClick={() => handleDeleteClick(employee._id)}
                 >
-                  <i class="fa-solid fa-trash"></i>
+                  <i className="fa-solid fa-trash"></i>
                 </button>
               </td>
             </tr>

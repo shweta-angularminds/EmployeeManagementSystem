@@ -10,7 +10,7 @@ const getEmployees = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Admin id is required!");
   }
 
-  const { page = 1, limit = 5, search, salary, sortBy, order } = req.query;
+  const { page = 1, limit = 10, search, salary, sortBy, order } = req.query;
 
   const limitNumber = parseInt(limit, 10);
   const pageNumber = parseInt(page, 10);

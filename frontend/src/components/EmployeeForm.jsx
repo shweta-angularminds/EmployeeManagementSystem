@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { addEmployee, updateEmployee } from "../service/employeeService";
 import { showToast } from "../service/notify";
-
+import "../App.css";
 const EmployeeForm = ({
   showModal,
   setShowModal,
@@ -41,19 +41,31 @@ const EmployeeForm = ({
     if (employeeName.trim().length < 3) {
       formErrors.employeeName = "Employee Name must be at least 3 characters.";
       isValid = false;
+    } else if (!/^[A-Za-z\s]+$/.test(employeeName.trim())) {
+      formErrors.employeeName =
+        "Employee Name can only contain letters and spaces.";
+      isValid = false;
     } else {
       formErrors.employeeName = "";
     }
 
-    if (!designation.trim()) {
-      formErrors.designation = "Designation is required.";
+
+    if (designation.trim().length < 2) {
+      formErrors.designation = "Designation name must be at least 2 characters";
+      isValid = false;
+    } else if (!/^[A-Za-z\s]+$/.test(designation.trim())) {
+      formErrors.designation =
+        "Designation can only contain letters and spaces.";
       isValid = false;
     } else {
       formErrors.designation = "";
     }
 
-    if (!department.trim()) {
-      formErrors.department = "Department is required.";
+    if (department.trim().length < 2) {
+      formErrors.department = "Department name must be at least 2 characters";
+      isValid = false;
+    } else if (!/^[A-Za-z\s]+$/.test(department.trim())) {
+      formErrors.department = "Department can only contain letters and spaces.";
       isValid = false;
     } else {
       formErrors.department = "";
@@ -115,14 +127,17 @@ const EmployeeForm = ({
               <button
                 type="button"
                 className="btn-close"
-                onClick={() => setShowModal(false)}
+                onClick={() => {
+                  setShowModal(false);
+                  setErrors({});
+                }}
                 aria-label="Close"
               ></button>
             </div>
             <div className="modal-body">
               <form onSubmit={handleSubmit}>
                 <div className="mb-3">
-                  <label htmlFor="employeeName" className="form-label">
+                  <label htmlFor="employeeName" className="form-label fw-bold">
                     Employee Name
                   </label>
                   <input
@@ -138,7 +153,7 @@ const EmployeeForm = ({
                   )}
                 </div>
                 <div className="mb-3">
-                  <label htmlFor="designation" className="form-label">
+                  <label htmlFor="designation" className="form-label fw-bold">
                     Designation
                   </label>
                   <input
@@ -154,7 +169,7 @@ const EmployeeForm = ({
                   )}
                 </div>
                 <div className="mb-3">
-                  <label htmlFor="department" className="form-label">
+                  <label htmlFor="department" className="form-label fw-bold">
                     Department
                   </label>
                   <input
@@ -170,7 +185,7 @@ const EmployeeForm = ({
                   )}
                 </div>
                 <div className="mb-3">
-                  <label htmlFor="salary" className="form-label">
+                  <label htmlFor="salary" className="form-label fw-bold">
                     Salary
                   </label>
                   <input
@@ -185,9 +200,11 @@ const EmployeeForm = ({
                     <div className="text-danger">{errors.salary}</div>
                   )}
                 </div>
-                <button type="submit" className="btn btn-primary">
-                  {employeeData ? "Update Employee" : "Add Employee"}
-                </button>
+                <div className="p-2 text-end">
+                  <button type="submit" className="btn normal-btn">
+                    {employeeData ? "Update Employee" : "Add Employee"}
+                  </button>
+                </div>
               </form>
             </div>
           </div>

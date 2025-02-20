@@ -9,43 +9,43 @@ import EmployeeForm from "./EmployeeForm";
 
 const Dashboard = () => {
   const navigate = useNavigate();
+
   const [employees, setEmployees] = useState([]);
   const [sortField, setSortField] = useState("employee_name");
   const [sortOrder, setSortOrder] = useState("asc");
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [limit,setLimit]=useState(10);
   const [showModal, setShowModal] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
 
   const handleLogout = () => {
-    // You can now navigate to the login page in the component
     navigate("/login");
   };
 
-  const getData = async (searchQuery = "", page = 1) => {
+  const getData = async (searchQuery = "", page = 1,limit = 10) => {
     try {
       const params = {};
       if (searchQuery.trim()) params.search = searchQuery;
       if (sortField) params.sortBy = sortField;
       if (sortOrder) params.order = sortOrder;
       params.page = page;
-
+      params.limit = limit;
       const response = await getEmployees(params);
-
       setEmployees(response.employees);
       setTotalPages(response.totalPages);
       setCurrentPage(response.page);
     } catch (error) {
       if (error.response && error.response.status === 401) {
-        handleLogout(); // Call your custom logout handler
+        handleLogout();
       }
     }
   };
 
   useEffect(() => {
-    getData(search, currentPage);
-  }, [sortField, sortOrder, search, currentPage]);
+    getData(search, currentPage,limit);
+  }, [sortField, sortOrder, search, currentPage,limit]);
 
   const handleSearchChange = (e) => {
     const value = e.target.value;
@@ -56,12 +56,16 @@ const Dashboard = () => {
     setSortField(field);
     setSortOrder(order);
   };
+  const handleLimitChange = (e) =>{
+    const value = e.target.value;
+    setLimit(Number(value))
+  }
 
   const handlePageChange = (selectedPage) => {
     setCurrentPage(selectedPage.selected + 1);
   };
   const refreshData = () => {
-    getData(search, currentPage);
+    getData(search, currentPage,limit);
   };
   const handleAddEmployee = () => {
     setSelectedEmployee(null);
@@ -75,8 +79,8 @@ const Dashboard = () => {
   return (
     <>
       <Header></Header>
-      <div className="d-flex justify-content-between flex-wrap p-3 bg-custom">
-        <div className="col col-lg-9 col-md-9 col-8">
+      <div className="d-flex justify-content-between align-items-center flex-wrap p-3 bg-custom">
+        <div className="col col-lg-9 col-md-9 col-8 p-2">
           <input
             type="text"
             name="search"
@@ -94,7 +98,7 @@ const Dashboard = () => {
       </div>
 
       {employees.length > 0 ? (
-        <>
+        <div className="bg-primary">
           <EmployeeTable
             employees={employees}
             onSort={handleSort}
@@ -102,7 +106,16 @@ const Dashboard = () => {
             onEdit={handleEditEmployee}
           />
 
-          <div className="pagination mt-4 d-flex">
+          <div className="pagination d-flex align-items-center mt-0 py-3 bg-custom">
+            <div className="dropdown bg-custom me-4 ms-3">
+              <label className="me-2">Data per page</label>
+              <select onChange={handleLimitChange} value={limit}>
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="30">30</option>
+              </select>
+            </div>
             <ReactPaginate
               previousLabel={"Previous"}
               nextLabel={"Next"}
@@ -115,7 +128,7 @@ const Dashboard = () => {
               activeClassName={"active-page"} // Add custom class for active page
             />
           </div>
-        </>
+        </div>
       ) : (
         <p>No employees found.</p>
       )}
