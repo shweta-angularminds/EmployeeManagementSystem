@@ -12,11 +12,13 @@ const EmployeeForm = ({
   const [designation, setDesignation] = useState("");
   const [department, setDepartment] = useState("");
   const [salary, setSalary] = useState("");
+  const [email, setEmail] = useState("");
   const [errors, setErrors] = useState({
     employeeName: "",
     designation: "",
     department: "",
     salary: "",
+    email: "",
   });
 
   useEffect(() => {
@@ -25,12 +27,14 @@ const EmployeeForm = ({
       setDesignation("");
       setDepartment("");
       setSalary("");
+      setEmail("");
     }
     if (employeeData) {
       setEmployeeName(employeeData.employee_name);
       setDesignation(employeeData.designation);
       setDepartment(employeeData.department);
       setSalary(employeeData.salary);
+      setEmail(employeeData.email);
     }
   }, [showModal, employeeData]);
 
@@ -48,7 +52,6 @@ const EmployeeForm = ({
     } else {
       formErrors.employeeName = "";
     }
-
 
     if (designation.trim().length < 2) {
       formErrors.designation = "Designation name must be at least 2 characters";
@@ -70,6 +73,10 @@ const EmployeeForm = ({
     } else {
       formErrors.department = "";
     }
+
+    if (!email) formErrors.email = "Email is required!";
+    else if (!/\S+@\S+\.\S+/.test(email))
+      formErrors.email = "Please enter a valid email.";
 
     if (!salary || isNaN(salary) || salary <= 0) {
       formErrors.salary = "Salary must be a positive number.";
@@ -93,6 +100,7 @@ const EmployeeForm = ({
       designation,
       department,
       salary,
+      email,
     };
     try {
       if (employeeData) {
@@ -182,6 +190,22 @@ const EmployeeForm = ({
                   />
                   {errors.department && (
                     <div className="text-danger">{errors.department}</div>
+                  )}
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="email" className="form-label fw-bold">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    className="form-control"
+                    id="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                  {errors.email && (
+                    <div className="text-danger">{errors.email}</div>
                   )}
                 </div>
                 <div className="mb-3">

@@ -21,6 +21,11 @@ const employeeSchema = new Schema(
       required: true,
       lowercase: true,
     },
+    email:{
+      type: String,
+      required: true,
+      lowercase: true,
+    },
     admin_Id: {
       type: Schema.Types.ObjectId,
       ref: "admins",

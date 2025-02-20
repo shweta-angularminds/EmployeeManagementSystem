@@ -29,7 +29,7 @@ const Header = () => {
       fetchProfileData();
       console.log("Use effect called");
     }
-  }, []);
+  }, [isLoggingOut]);
   const logOut = async () => {
     try {
       setIsLoggingOut(true);

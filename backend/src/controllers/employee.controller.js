@@ -56,8 +56,8 @@ const addEmployee = asyncHandler(async (req, res) => {
   if (!admin_Id) {
     throw new ApiError(400, "admin id are required!");
   }
-  const { employee_name, designation, salary, department } = req.body;
-  if (!employee_name || !designation || !salary || !department) {
+  const { employee_name, designation, salary, department,email } = req.body;
+  if (!employee_name || !designation || !salary || !department || !email) {
     throw new ApiError(400, "All fields are required!");
   }
   const employee = await Employee.create({
@@ -65,6 +65,7 @@ const addEmployee = asyncHandler(async (req, res) => {
     designation,
     salary,
     department,
+    email,
     admin_Id,
   });
   if (!employee) {
@@ -88,13 +89,13 @@ const updateEmployee = asyncHandler(async (req, res) => {
   if (!emp_Id) {
     throw new ApiError(404, "employee id is required");
   }
-  const { employee_name, designation, salary, department } = req.body;
-  if (!employee_name || !designation || !salary || !department) {
+  const { employee_name, designation, salary, department ,email} = req.body;
+  if (!employee_name || !designation || !salary || !department ||!email) {
     throw new ApiError(400, "All fields are required!");
   }
   const updatedEmployee = await Employee.findByIdAndUpdate(
     emp_Id,
-    { employee_name, designation, salary, department },
+    { employee_name, designation, salary, department,email },
     { new: true, runValidators: true }
   );
 

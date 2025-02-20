@@ -50,6 +50,7 @@ const EmployeeTable = ({ employees, onSort, refreshData, onEdit }) => {
             </th>
             <th scope="col">Designation</th>
             <th scope="col">Department</th>
+            <th scope="col">Email</th>
             <th scope="col">
               {" "}
               <span className="d-flex align-items-center">
@@ -76,6 +77,7 @@ const EmployeeTable = ({ employees, onSort, refreshData, onEdit }) => {
               <td>{employee.employee_name}</td>
               <td>{employee.designation}</td>
               <td>{employee.department}</td>
+              <td style={{textTransform:"lowercase"}}>{employee.email}</td>
               <td>
                 &#8377;
                 {employee.salary}
