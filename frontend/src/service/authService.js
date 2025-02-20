@@ -1,3 +1,4 @@
+import axios from "axios";
 import axiosInstance from "../api/axiosInstance";
 
 const registerUser = async (data) => {
@@ -21,9 +22,12 @@ const loginUser = async (data) => {
 
 const logOutUser = async () => {
   try {
-   
-    await axiosInstance.post("/auth/logout", 
-     
+    const response = await axiosInstance.post(
+      "/auth/logout",
+      {},
+      {
+        withCredentials: true,
+      }
     );
 
     localStorage.removeItem("token");

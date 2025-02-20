@@ -14,7 +14,7 @@ function App() {
   const isAuthenticated = () => {
     const token = localStorage.getItem("token");
     return token ? true : false;
-  }; 
+  };
 
   return (
     <div>
@@ -25,8 +25,22 @@ function App() {
             path="/"
             element={isAuthenticated ? <Navigate to="/dashboard" /> : <Login />}
           />
-          <Route path="/register" element={<RegisterForm />} />
-          <Route path="/login" element={<Login />}></Route>
+          <Route
+            path="/register"
+            element={
+              isAuthenticated() ? (
+                <Navigate to="/dashboard" />
+              ) : (
+                <RegisterForm />
+              )
+            }
+          />
+          <Route
+            path="/login"
+            element={
+              isAuthenticated() ? <Navigate to="/dashboard" /> : <Login />
+            }
+          />
           {/* Protected routes */}
           <Route
             path="/dashboard"

@@ -41,7 +41,7 @@ const RegisterForm = () => {
         const { confirmPassword, ...dataToSend } = formData;
 
         await registerUser(dataToSend);
-        
+
         setErrors({});
         showToast("Registered Succesfully!", "success");
         setFormData({
@@ -69,7 +69,7 @@ const RegisterForm = () => {
         <div className="row d-flex justify-content-center align-items-center">
           <div
             className="col col-lg-4 bg-white mt-5 p-4 
-           border"
+           border min-height-65"
           >
             <div className="header text-center">
               <h3 className="green-gradient">Register</h3>

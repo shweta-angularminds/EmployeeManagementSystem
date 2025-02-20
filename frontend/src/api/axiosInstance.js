@@ -7,7 +7,7 @@ axiosInstance.interceptors.request.use(
   (config) => {
     const accessToken = localStorage.getItem("token");
     if (accessToken) {
-      config.headers["Authorization"] = `Bearer ${accessToken}`; 
+      config.headers["Authorization"] = `Bearer ${accessToken}`;
     }
     return config;
   },
@@ -44,9 +44,10 @@ const refreshAccessToken = async () => {
         withCredentials: true,
       }
     );
-    console.log(response.data);
+    console.log(response.data.data);
 
-    const newAccessToken = response.data.token;
+    const newAccessToken = response.data.data.accessToken;
+    console.log("New Access token:", newAccessToken);
     if (newAccessToken) {
       localStorage.setItem("token", newAccessToken);
       console.log("New access token generated:", newAccessToken);

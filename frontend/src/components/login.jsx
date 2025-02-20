@@ -5,7 +5,6 @@ import { showToast } from "../service/notify";
 import { loginUser } from "../service/authService";
 
 const Login = () => {
-  
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -53,44 +52,46 @@ const Login = () => {
         <div className="row d-flex justify-content-center align-items-center">
           <div
             className="col col-lg-4 bg-white mt-5 p-4 
-           border"
+           border min-height-65"
           >
             <div className="header text-center">
               <h3 className="green-gradient">Login</h3>
             </div>
             <div className="w-100 py-3">
               <form onSubmit={handleSubmit}>
-                <div className="mb-3">
-                  <input
-                    placeholder="email"
-                    className="input-text"
-                    type="text"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                  />
-                  {errors.email && <p className="error">{errors.email}</p>}
-                </div>
-                <div className="mb-3">
-                  <input
-                    placeholder="password"
-                    className="input-text"
-                    type="password"
-                    name="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                  />
-                  {errors.password && (
-                    <p className="error">{errors.password}</p>
-                  )}
+                <div className="mb-5">
+                  <div className="mb-3 mt-3">
+                    <input
+                      placeholder="email"
+                      className="input-text"
+                      type="text"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                    />
+                    {errors.email && <p className="error">{errors.email}</p>}
+                  </div>
+                  <div className="mb-3">
+                    <input
+                      placeholder="password"
+                      className="input-text"
+                      type="password"
+                      name="password"
+                      value={formData.password}
+                      onChange={handleChange}
+                    />
+                    {errors.password && (
+                      <p className="error">{errors.password}</p>
+                    )}
+                  </div>
                 </div>
 
-                <div className="text-center mt-2 p-2">
+                <div className="text-center mt-4 p-2">
                   <button className="submit-btn" type="submit">
                     Login
                   </button>
                 </div>
-                <div className="navigation mt-0">
+                <div className="navigation mt-1">
                   <p>New user? </p>
                   <Link to="/register" className="anchor">
                     Register here

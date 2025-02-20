@@ -10,29 +10,23 @@ const getEmployees = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Admin id is required!");
   }
 
-  // Destructure query parameters
   const { page = 1, limit = 5, search, salary, sortBy, order } = req.query;
 
-  // Convert limit and page to integers
   const limitNumber = parseInt(limit, 10);
   const pageNumber = parseInt(page, 10);
 
-  // Default sorting field and order
-  const sortField = sortBy || "employee_name"; // Default sort by name if not provided
-  const sortOrder = order === "desc" ? -1 : 1; // Default ascending order
+  const sortField = sortBy || "employee_name";
+  const sortOrder = order === "desc" ? -1 : 1;
 
-  // Build query object
-  let query = { admin_Id: admin_Id }; // Ensure we only get employees for this admin
+  let query = { admin_Id: admin_Id };
 
-  // Search by employee name or department
   if (search) {
     query.$or = [
-      { employee_name: { $regex: search, $options: "i" } }, // Search by name
-      { department: { $regex: search, $options: "i" } }, // Search by department
+      { employee_name: { $regex: search, $options: "i" } },
+      { department: { $regex: search, $options: "i" } },
     ];
   }
 
-  // Salary filter (less than specified values)
   if (salary) {
     const salaryLimit = parseInt(salary, 10);
     if (salaryLimit) {
@@ -40,16 +34,13 @@ const getEmployees = asyncHandler(async (req, res) => {
     }
   }
 
-  // Pagination
   const skip = (pageNumber - 1) * limitNumber;
 
-  // Fetch employees with pagination, filtering, and sorting
   const employees = await Employee.find(query)
     .skip(skip)
     .limit(limitNumber)
     .sort({ [sortField]: sortOrder });
 
-  // Get total count of employees for pagination info
   const totalEmployees = await Employee.countDocuments(query);
 
   return res.status(200).json({
@@ -102,9 +93,9 @@ const updateEmployee = asyncHandler(async (req, res) => {
     throw new ApiError(400, "All fields are required!");
   }
   const updatedEmployee = await Employee.findByIdAndUpdate(
-    emp_Id, // Employee ID to match
-    { employee_name, designation, salary, department }, // Data to update
-    { new: true, runValidators: true } // Options: 'new' returns the updated document, 'runValidators' ensures validation is applied
+    emp_Id,
+    { employee_name, designation, salary, department },
+    { new: true, runValidators: true }
   );
 
   if (!updatedEmployee) {

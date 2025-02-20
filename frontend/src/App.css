@@ -1,11 +1,35 @@
 .back-color {
-  background: radial-gradient(
+  /* background: radial-gradient(
     circle at top right,
     #09c58d,
     #0970c5,
     #2ed0e5,
     #6dddbc
-  );
+  ); */
+  background-size: 100% 100%;
+  background-position: 0px 0px, 0px 0px, 0px 0px, 0px 0px, 0px 0px;
+  background-image: radial-gradient(
+      49% 81% at 45% 47%,
+      #ffe20345 0%,
+      #073aff00 100%
+    ),
+    radial-gradient(113% 91% at 17% -2%, #ff000000 64%, #71ade0ff 100%),
+    repeating-radial-gradient(
+      142% 91% at 83% 7%,
+      #90afc4ff 0%,
+      #00a2ffff 1%,
+      #f1404000 99%
+    ),
+    conic-gradient(from 37deg at -6% 74%, #c0ffe5ff 1%, #87f8ffff 99%),
+    radial-gradient(
+      142% 91% at 111% 84%,
+      #a8f3eeff 0%,
+      #4f63b7ff 78%,
+      #a8f3eeff 100%
+    );
+}
+.min-height-65 {
+  height: 65vh;
 }
 .input-label {
   font-size: 1rem;
@@ -46,7 +70,7 @@
   font-size: 0.9rem;
   border: 0;
   color: white;
-  width: 75%;
+  width: 100%;
   font-weight: 500;
   padding: 0.4rem 1rem;
   background: linear-gradient(to right bottom, #0970c5, #2ed0e5, #6dddbc);

@@ -4,6 +4,23 @@ import { Admin } from "../models/admin.model.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
 
+const getCookieOptions = (type) => {
+  const options = {
+    httpOnly: true,
+    secure: false,
+    crossSite: "True",
+    path: "/",
+  };
+
+  if (type === "accessToken") {
+    options.expires = new Date(Date.now() + 1 * 60 * 1000); // 3 minutes
+  } else if (type === "refreshToken") {
+    options.expires = new Date(Date.now() + 3 * 60 * 1000); // 10 days
+  }
+
+  return options;
+};
+
 const generateAccessAndRefreshTokens = async (userId) => {
   try {
     const user = await Admin.findById(userId);
@@ -15,7 +32,6 @@ const generateAccessAndRefreshTokens = async (userId) => {
 
     return { accessToken, refreshToken };
   } catch (error) {
-    console.log("Error:", error);
     throw new ApiError(
       500,
       "Something went wrong while generating refresh and access token"
@@ -73,16 +89,16 @@ const loginUser = asyncHandler(async (req, res) => {
   const loggedInUser = await Admin.findById(user._id).select(
     "-password -refreshToken"
   );
-  const options = {
-    httpOnly: true,
-    secure: false,
-    sameSite: "None",
-    path: "/",
-  };
+  // const options = {
+  //   httpOnly: true,
+  //   secure: false,
+  //   sameSite: "None",
+  //   path: "/",
+  // };
   return res
     .status(200)
-    .cookie("accessToken", accessToken, options)
-    .cookie("refreshToken", refreshToken, options)
+    .cookie("accessToken", accessToken, getCookieOptions("accessToken"))
+    .cookie("refreshToken", refreshToken, getCookieOptions("refreshToken"))
     .json(
       new ApiResponse(
         200,
@@ -110,7 +126,7 @@ const logOutUser = asyncHandler(async (req, res) => {
   const options = {
     httpOnly: true,
     secure: false,
-    sameSite: "None",
+    crossSite: "True",
     path: "/",
   };
   return res
@@ -122,63 +138,58 @@ const logOutUser = asyncHandler(async (req, res) => {
 
 const refreshAccessToken = asyncHandler(async (req, res) => {
   const incomingRefreshToken = req.cookies.refreshToken;
-  console.log("\nRequest:\n", req.cookies);
 
   if (!incomingRefreshToken) {
     throw new ApiError(404, "token is required");
   }
 
   try {
-    // Verify the incoming refresh token
     const decodedToken = jwt.verify(
       incomingRefreshToken,
       process.env.REFRESH_TOKEN_SECRET
     );
 
-    // Find user associated with the refresh token
     const user = await Admin.findById(decodedToken?._id);
     if (!user) {
       throw new ApiError(401, "Invalid refresh token");
     }
 
-    // If the refresh token in the cookie doesn't match the stored refresh token
     if (incomingRefreshToken !== user?.refreshToken) {
+      console.log("\n \n Refresh token expired\n \n");
       throw new ApiError(401, "Refresh token is expired or used");
     }
 
-    // Now check if the refresh token has expired
-    const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
-    const refreshTokenExpiryTime = decodedToken.exp; // Expiry time from the decoded token
+    const currentTime = Math.floor(Date.now() / 1000);
+    const refreshTokenExpiryTime = decodedToken.exp;
 
-    // If the refresh token has expired, generate a new one
     let refreshToken;
     if (refreshTokenExpiryTime <= currentTime) {
-      // Refresh token expired, generate new one
       refreshToken = user.generateRefreshToken();
       user.refreshToken = refreshToken;
+
       await user.save({ validateBeforeSave: false });
     } else {
-      // Use existing refresh token for generating a new access token
       refreshToken = incomingRefreshToken;
     }
 
-    // Generate a new access token
     const accessToken = user.generateAccessToken();
-
-    // Set new refresh token and access token in the cookies
-    const options = {
-      httpOnly: true,
-      secure: false,
-      sameSite: "None",
-      path: "/",
-    };
 
     return res
       .status(200)
-      .cookie("accessToken", accessToken, options)
-      .cookie("refreshToken", refreshToken, options)
+      .cookie("accessToken", accessToken, getCookieOptions("accessToken"))
+      .cookie("refreshToken", refreshToken, getCookieOptions("refreshToken"))
       .json(new ApiResponse(200, { accessToken }, "Access token refreshed"));
   } catch (error) {
+    const options = {
+      httpOnly: true,
+      secure: false,
+      crossSite: "True",
+      path: "/",
+    };
+    res
+      .clearCookie("accessToken", options)
+      .clearCookie("refreshToken", options);
+
     throw new ApiError(401, error?.message || "Invalid refresh token");
   }
 });
