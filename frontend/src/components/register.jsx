@@ -30,7 +30,8 @@ const RegisterForm = () => {
     else if (!/\S+@\S+\.\S+/.test(formData.email))
       validationErrors.email = "Please enter a valid email.";
 
- 
+    if (!formData.organization)
+      validationErrors.organization = "Organization is required!";
     if (!passwordRegex.test(formData.password)) {
       validationErrors.password =
         "Password must be at least 6 characters long and contain at least one alphabet and one digit.";
@@ -43,7 +44,6 @@ const RegisterForm = () => {
   };
 
   const handleSubmit = async (e) => {
-    
     e.preventDefault();
     let validationErrors = {};
     validationErrors = await validateForm(formData);
@@ -63,6 +63,7 @@ const RegisterForm = () => {
       setFormData({
         username: "",
         email: "",
+        organization: "",
         password: "",
         confirmPassword: "",
       });
@@ -115,6 +116,20 @@ const RegisterForm = () => {
                   />
                   {errors.email && <p className="error">{errors.email}</p>}
                 </div>
+                <div className="mb-3">
+                  <input
+                    placeholder="organization name"
+                    className="input-text"
+                    type="text"
+                    name="organization"
+                    value={formData.organization}
+                    onChange={handleChange}
+                  />
+                  {errors.organization && (
+                    <p className="error">{errors.organization}</p>
+                  )}
+                </div>
+
                 <div className="mb-3">
                   <input
                     placeholder="password"

@@ -19,6 +19,13 @@ const adminSchema = new Schema(
       lowercase: true,
       trim: true,
     },
+    organization: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
+    },
     password: {
       type: String,
       required: [true, "Password is required!"],
@@ -48,6 +55,7 @@ adminSchema.methods.generateAccessToken = function () {
       _id: this._id,
       email: this.email,
       username: this.username,
+      organization:this.organization
     },
     process.env.ACCESS_TOKEN_SECRET,
     {

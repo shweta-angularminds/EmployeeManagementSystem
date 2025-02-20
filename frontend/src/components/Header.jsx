@@ -6,12 +6,17 @@ import { logOutUser, getProfile } from "../service/authService";
 
 const Header = () => {
   const navigate = useNavigate();
-  const [profile, setProfile] = useState({ username: "", email: "" });
-  const [isLoggingOut, setIsLoggingOut] = useState(false); 
+  const [profile, setProfile] = useState({
+    username: "",
+    email: "",
+    organization: "",
+  });
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const fetchProfileData = async () => {
     try {
       const data = await getProfile();
+      console.log(data);
       setProfile(data);
     } catch (error) {
       showToast("Error to load profile", "error");
@@ -24,7 +29,7 @@ const Header = () => {
       fetchProfileData();
       console.log("Use effect called");
     }
-  }, []); 
+  }, []);
   const logOut = async () => {
     try {
       setIsLoggingOut(true);
@@ -35,7 +40,7 @@ const Header = () => {
     } catch (error) {
       showToast("Something went wrong", "error");
     } finally {
-      setIsLoggingOut(false); 
+      setIsLoggingOut(false);
     }
   };
 
@@ -43,7 +48,7 @@ const Header = () => {
     <>
       <div className="container-fluid m-0 bg-white shadow-sm">
         <nav className="d-flex justify-content-between">
-          <h3 className="mt-2">WorkWise</h3>
+          <h3 className="mt-2 text-capitalize">{profile.organization}</h3>
           <span className="p-2 me-3">
             <div className="dropdown-center">
               <button
