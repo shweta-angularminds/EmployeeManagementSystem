@@ -127,7 +127,7 @@ const EmployeeForm = ({
         className={`modal fade ${showModal ? "show" : ""}`}
         tabIndex="-1"
         aria-labelledby="employeeFormModal"
-        aria-hidden="true"
+        
         style={{
           display: showModal ? "block" : "none",
           backgroundColor: showModal ? "rgba(0, 0, 0, 0.5)" : "transparent",

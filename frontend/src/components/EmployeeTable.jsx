@@ -19,7 +19,7 @@ const EmployeeTable = ({ employees, onSort, refreshData, onEdit }) => {
 
       if (confirmed) {
         await deleteEmployee(employeeId);
-        showToast("Deleted successfully!", "successs");
+        showToast("Deleted successfully!", "success");
         refreshData();
       }
     } catch (error) {

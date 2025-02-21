@@ -20,10 +20,10 @@ function App() {
     <div>
       <Router>
         <Routes>
-          {/* <Route path="/" element={<RegisterForm />}></Route> */}
+         
           <Route
             path="/"
-            element={isAuthenticated ? <Navigate to="/dashboard" /> : <Login />}
+            element={isAuthenticated() ? <Navigate to="/dashboard" /> : <Login />}
           />
           <Route
             path="/register"
@@ -50,7 +50,7 @@ function App() {
               </PrivateRoute>
             }
           />
-          {/* <Route path="/dashboard" element={<Dashboard />}></Route> */}
+         
         </Routes>
       </Router>
     </div>

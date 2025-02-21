@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "../App.css";
 import { useNavigate } from "react-router-dom";
 import { showToast } from "../service/notify";
@@ -11,38 +11,34 @@ const Header = () => {
     email: "",
     organization: "",
   });
-  const [isLoggedOut, setIsLoggedOut] = useState(false); 
+  const [isLoggedOut, setIsLoggedOut] = useState(false);
+  const [isProfileFetched, setIsProfileFetched] = useState(false);
 
   const fetchProfileData = async () => {
     try {
+      if (isLoggedOut || isProfileFetched) return; 
       const data = await getProfile();
-      console.log(data);
       setProfile(data);
+      setIsProfileFetched(true); 
     } catch (error) {
       showToast("Error loading profile", "error");
     }
   };
 
-  useEffect(() => {
-    
-    if (isLoggedOut === false) {
-      fetchProfileData();
-    }
-    console.log("Use effect called");
-  }, [isLoggedOut]); 
+  if (!isProfileFetched && !isLoggedOut) {
+    fetchProfileData(); 
+  }
 
   const logOut = async () => {
     try {
       await logOutUser();
-
       showToast("Logged out successfully!", "success");
       setIsLoggedOut(true);
+      setIsProfileFetched(false); 
       navigate("/login");
     } catch (error) {
       showToast("Something went wrong", "error");
-    } finally {
-      console.log("Logout process finished");
-    }
+    } 
   };
 
   return (
@@ -58,7 +54,7 @@ const Header = () => {
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
-                <label  className="text-capitalize"> {profile.username}</label>
+                <label className="text-capitalize"> {profile.username}</label>
               </button>
               <ul className="dropdown-menu bg-white">
                 <li onClick={logOut} className="text-center">

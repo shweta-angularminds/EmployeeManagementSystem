@@ -45,7 +45,7 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    console.log("in dashboard use effect called!");
+    //console.log("in dashboard use effect called!");
     getData(search, currentPage, limit);
   }, [sortField, sortOrder, search, currentPage, limit]);
 

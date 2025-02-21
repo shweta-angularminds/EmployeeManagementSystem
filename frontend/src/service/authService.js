@@ -3,8 +3,7 @@ import axiosInstance from "../api/axiosInstance";
 
 const registerUser = async (data) => {
   try {
-    
-    await axios.post("http://localhost:8000/api/v1/auth/register", data);
+    await axiosInstance.post("/auth/register", data);
   } catch (error) {
     throw error;
   }

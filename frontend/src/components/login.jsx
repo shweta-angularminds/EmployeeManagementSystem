@@ -34,6 +34,7 @@ const Login = () => {
         showToast("Login successful!", "success");
 
         setTimeout(() => {
+          console.log("naviagted to dashboard");
           navigate("/dashboard");
         }, 1000);
 
