@@ -16,7 +16,7 @@ const Dashboard = () => {
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [limit,setLimit]=useState(10);
+  const [limit, setLimit] = useState(10);
   const [showModal, setShowModal] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
 
@@ -24,7 +24,7 @@ const Dashboard = () => {
     navigate("/login");
   };
 
-  const getData = async (searchQuery = "", page = 1,limit = 10) => {
+  const getData = async (searchQuery = "", page = 1, limit = 10) => {
     try {
       const params = {};
       if (searchQuery.trim()) params.search = searchQuery;
@@ -37,6 +37,7 @@ const Dashboard = () => {
       setTotalPages(response.totalPages);
       setCurrentPage(response.page);
     } catch (error) {
+     
       if (error.response && error.response.status === 401) {
         handleLogout();
       }
@@ -44,28 +45,30 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    getData(search, currentPage,limit);
-  }, [sortField, sortOrder, search, currentPage,limit]);
+    console.log("in dashboard use effect called!");
+    getData(search, currentPage, limit);
+  }, [sortField, sortOrder, search, currentPage, limit]);
 
   const handleSearchChange = (e) => {
     const value = e.target.value;
     setSearch(value);
+    console.log("name search:", value);
   };
 
   const handleSort = (field, order) => {
     setSortField(field);
     setSortOrder(order);
   };
-  const handleLimitChange = (e) =>{
+  const handleLimitChange = (e) => {
     const value = e.target.value;
-    setLimit(Number(value))
-  }
+    setLimit(Number(value));
+  };
 
   const handlePageChange = (selectedPage) => {
     setCurrentPage(selectedPage.selected + 1);
   };
   const refreshData = () => {
-    getData(search, currentPage,limit);
+    getData(search, currentPage, limit);
   };
   const handleAddEmployee = () => {
     setSelectedEmployee(null);
@@ -130,7 +133,9 @@ const Dashboard = () => {
           </div>
         </div>
       ) : (
-        <p>No employees found.</p>
+        <div className="no-content">
+          <p>No employees found.</p>
+        </div>
       )}
       <EmployeeForm
         showModal={showModal}

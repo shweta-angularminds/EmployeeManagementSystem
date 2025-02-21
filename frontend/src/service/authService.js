@@ -3,7 +3,7 @@ import axiosInstance from "../api/axiosInstance";
 
 const registerUser = async (data) => {
   try {
-    alert("api called")
+    
     await axios.post("http://localhost:8000/api/v1/auth/register", data);
   } catch (error) {
     throw error;
@@ -39,6 +39,11 @@ const logOutUser = async () => {
 
 const getProfile = async () => {
   try {
+    // const token = localStorage.getItem("token");
+    // if (!token) {
+    //   throw new Error("No token found");
+    // }
+
     const response = await axiosInstance.get("/auth/profile");
     return response.data;
   } catch (error) {

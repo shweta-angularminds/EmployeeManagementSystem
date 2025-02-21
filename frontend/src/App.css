@@ -66,8 +66,9 @@
   font-size: 0.8rem;
   color: rgb(240, 68, 68);
 }
-.text-danger{
+.text-danger {
   font-size: 0.8rem;
+  margin-top: 0.5rem;
 }
 .submit-btn {
   font-size: 0.9rem;
@@ -136,7 +137,6 @@ th {
 }
 td {
   text-transform: capitalize;
-  
 }
 .dropdown {
   background-color: white;
@@ -213,8 +213,18 @@ a {
   background-color: #f0f0f0;
 }
 
-
-.fw-bold{
-  color:rgb(66, 66, 66);
+.fw-bold {
+  color: rgb(66, 66, 66);
   font-size: 0.9rem;
+}
+.no-content {
+  text-align: center;
+  margin-top: 10px;
+  padding: 1rem;
+  p {
+    font-size: 1.5rem;
+    color: grey;
+    font-weight: normal;
+    text-transform: capitalize;
+  }
 }

@@ -13,9 +13,9 @@ const getCookieOptions = (type) => {
   };
 
   if (type === "accessToken") {
-    options.expires = new Date(Date.now() + 30 * 60 * 1000); // 3 minutes
+    options.expires = new Date(Date.now() + 30 * 60 * 1000); // 30 minutes 30 * 60 * 1000
   } else if (type === "refreshToken") {
-    options.expires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 10 days
+    options.expires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days 30 * 24 * 60 * 60 * 1000
   }
 
   return options;
@@ -121,7 +121,7 @@ const loginUser = asyncHandler(async (req, res) => {
 
 const logOutUser = asyncHandler(async (req, res) => {
   await Admin.findByIdAndUpdate(
-    req.user_id,
+    req.user._id,
     {
       $unset: {
         refreshToken: 1,

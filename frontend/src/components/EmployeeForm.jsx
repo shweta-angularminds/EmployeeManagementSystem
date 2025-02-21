@@ -75,8 +75,12 @@ const EmployeeForm = ({
     }
 
     if (!email) formErrors.email = "Email is required!";
-    else if (!/\S+@\S+\.\S+/.test(email))
+    else if (!/\S+@\S+\.\S+/.test(email)) {
       formErrors.email = "Please enter a valid email.";
+      isValid = false;
+    } else {
+      formErrors.email = "";
+    }
 
     if (!salary || isNaN(salary) || salary <= 0) {
       formErrors.salary = "Salary must be a positive number.";
@@ -124,7 +128,10 @@ const EmployeeForm = ({
         tabIndex="-1"
         aria-labelledby="employeeFormModal"
         aria-hidden="true"
-        style={{ display: showModal ? "block" : "none" }}
+        style={{
+          display: showModal ? "block" : "none",
+          backgroundColor: showModal ? "rgba(0, 0, 0, 0.5)" : "transparent",
+        }}
       >
         <div className="modal-dialog">
           <div className="modal-content">

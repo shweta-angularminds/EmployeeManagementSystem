@@ -21,15 +21,18 @@ const updateEmployee = async (id, formData) => {
     throw error;
   }
 };
-const getEmployees = async(params)=>{
-    try{
-            const response = await axiosInstance.get("/employee", {
-              params,
-            });
-            return response.data;
-    }
-    catch(error){
-        throw error;
-    }
-}
-export { deleteEmployee, addEmployee, updateEmployee,getEmployees };
+const getEmployees = async (params) => {
+  try {
+    // const token = localStorage.getItem("token");
+    // if (!token) {
+    //   throw new Error("No token found");
+    // }
+    const response = await axiosInstance.get("/employee", {
+      params,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+export { deleteEmployee, addEmployee, updateEmployee, getEmployees };

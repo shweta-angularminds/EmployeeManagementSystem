@@ -29,7 +29,7 @@ const EmployeeTable = ({ employees, onSort, refreshData, onEdit }) => {
 
   return (
     <>
-      <table className="table table-hover border mb-0">
+      <table className="table table-responsive table-hover border mb-0">
         <thead className="">
           <tr className="">
             <th scope="col ">#</th>
@@ -77,7 +77,7 @@ const EmployeeTable = ({ employees, onSort, refreshData, onEdit }) => {
               <td>{employee.employee_name}</td>
               <td>{employee.designation}</td>
               <td>{employee.department}</td>
-              <td style={{textTransform:"lowercase"}}>{employee.email}</td>
+              <td style={{ textTransform: "lowercase" }}>{employee.email}</td>
               <td>
                 &#8377;
                 {employee.salary}
@@ -87,7 +87,7 @@ const EmployeeTable = ({ employees, onSort, refreshData, onEdit }) => {
                   className="update-btn me-2 mb-1"
                   onClick={() => onEdit(employee)}
                 >
-                  <i class="fa-solid fa-pen"></i>
+                  <i className="fa-solid fa-pen"></i>
                 </button>
                 <button
                   className="delete-btn me-2"

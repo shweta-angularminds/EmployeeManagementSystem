@@ -11,7 +11,7 @@ const Header = () => {
     email: "",
     organization: "",
   });
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [isLoggedOut, setIsLoggedOut] = useState(false); 
 
   const fetchProfileData = async () => {
     try {
@@ -19,28 +19,29 @@ const Header = () => {
       console.log(data);
       setProfile(data);
     } catch (error) {
-      showToast("Error to load profile", "error");
-      logOut();
+      showToast("Error loading profile", "error");
     }
   };
 
   useEffect(() => {
-    if (!isLoggingOut) {
+    
+    if (isLoggedOut === false) {
       fetchProfileData();
-      console.log("Use effect called");
     }
-  }, [isLoggingOut]);
+    console.log("Use effect called");
+  }, [isLoggedOut]); 
+
   const logOut = async () => {
     try {
-      setIsLoggingOut(true);
       await logOutUser();
 
       showToast("Logged out successfully!", "success");
+      setIsLoggedOut(true);
       navigate("/login");
     } catch (error) {
       showToast("Something went wrong", "error");
     } finally {
-      setIsLoggingOut(false);
+      console.log("Logout process finished");
     }
   };
 
@@ -57,7 +58,7 @@ const Header = () => {
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
-                {profile.username}
+                <label  className="text-capitalize"> {profile.username}</label>
               </button>
               <ul className="dropdown-menu bg-white">
                 <li onClick={logOut} className="text-center">
