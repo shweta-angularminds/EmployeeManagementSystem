@@ -37,7 +37,6 @@ const Dashboard = () => {
       setTotalPages(response.totalPages);
       setCurrentPage(response.page);
     } catch (error) {
-     
       if (error.response && error.response.status === 401) {
         handleLogout();
       }
@@ -45,7 +44,7 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    //console.log("in dashboard use effect called!");
+    console.log("in dashboard use effect called!");
     getData(search, currentPage, limit);
   }, [sortField, sortOrder, search, currentPage, limit]);
 

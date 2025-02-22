@@ -35,7 +35,7 @@ const EmployeeTable = ({ employees, onSort, refreshData, onEdit }) => {
             <th scope="col ">#</th>
             <th scope="col  " className="d-flex ">
               <span className="d-flex align-items-center ">
-                <span className="me-2">Employee Name</span>
+                <span className="me-2 ">Employee Name</span>
                 <span className="d-flex flex-column align-items-center justify-content-start">
                   <i
                     className="fa-solid fa-caret-up m-0 p-0"
@@ -75,7 +75,7 @@ const EmployeeTable = ({ employees, onSort, refreshData, onEdit }) => {
             <tr key={employee._id}>
               <td>{index + 1}</td>
               <td>{employee.employee_name}</td>
-              <td>{employee.designation}</td>
+              <td >{employee.designation}</td>
               <td>{employee.department}</td>
               <td style={{ textTransform: "lowercase" }}>{employee.email}</td>
               <td>
